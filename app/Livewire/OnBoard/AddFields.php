@@ -104,7 +104,7 @@ class AddFields extends Component
          * where 0 = guest mode and 1 = Registered User
          */
 
-         (int) $created_by = 0; 
+         $created_by = 0; 
 
          
         if(Auth::check()){
