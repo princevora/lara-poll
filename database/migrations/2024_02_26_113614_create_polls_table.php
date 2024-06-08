@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('poll_name');
             $table->string('poll_id')->unique();
             $table->json('poll_fields');
+            $table->tinyInteger('created_by')->comment("0 = guest, 1 = Registered User")->default(0);
             $table->timestamps();
         });
     }
