@@ -114,14 +114,17 @@ class AddFields extends Component
         // Save the Poll TO DB.
         try {
 
-            $query = Polls::create([
-                'poll_name' => $this->poll_name,
+            // $query = Polls::create([
+            //     'poll_name' => $this->poll_name,
+            //     'poll_fields' => json_encode($this->fieldName, JSON_FORCE_OBJECT),
+            //     'poll_id' => $poll_id,
+            //     'created_by' => $created_by
+            // ])->toSql();
+
+            dd(['poll_name' => $this->poll_name,
                 'poll_fields' => json_encode($this->fieldName, JSON_FORCE_OBJECT),
                 'poll_id' => $poll_id,
-                'created_by' => $created_by
-            ])->toSql();
-
-            dd($query);
+                'created_by' => $created_by], "USER: ", $created_by);
 
             return $this->redirectRoute('vote.confirm-account', ['pollId' => $poll_id], navigate: true);
 
