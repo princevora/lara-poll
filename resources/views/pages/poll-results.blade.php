@@ -65,7 +65,7 @@
 
                                                             <!-- Save Total Votes For the field in A Var -->
                                                             @php
-                                                                $vote = $chartData->where('vote_field','=', $key)->first()->votes;
+                                                                $vote = @$chartData->where('vote_field','=', $key)->first()->votes;
                                                                 $percentage = number_format($vote / $totalVotes * 100);
                                                                 $bgClass = ($prePer !== null && $percentage > $prePer) ? 'bg-success' : '';
                                                                 $prePer = $percentage;
@@ -191,9 +191,11 @@
             name: 'Votes',
             colorByPoint: true,
             data: chartData.map(item => {
+
+                const percent = Math.round({{$vote / $totalVotes * 100}})
                 return {
                     name: `Option: ${item.vote_field}`,
-                    y: item.votes
+                    y: percent
                 }
             })
         }],

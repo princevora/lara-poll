@@ -42,7 +42,8 @@ class PollResultController extends Controller
         /**
          * Attempt A Conditional Rendering to prevent user to view the page.
          */
-        if ($this->poll_data !== null) {
+
+        if ($this->poll_data !== null ) {
             return view('pages.poll-results', [
                 'chartData' => $this->poll_data["data"],
                 'totalVotes' => $this->poll_data["total_votes"],
