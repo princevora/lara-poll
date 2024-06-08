@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('poll_name');
             $table->string('poll_id')->unique();
-            $table->json('post_fields');
+            $table->json('poll_fields');
             $table->timestamps();
         });
     }
