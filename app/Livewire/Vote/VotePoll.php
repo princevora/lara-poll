@@ -53,7 +53,6 @@ class VotePoll extends Component
 
     public function save()
     {
-
         /**
          * array_key_exists will check the requested vote field is exists in the collection of the poll fields
          * either it will return true if exists or false if dosent exists.

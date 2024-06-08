@@ -53,9 +53,11 @@
                                                 <!-- Declare A Var And Save Json To An Array -->
 
                                                     @php
+                                                        $poll_id = request()->poll_id;
                                                         $fields = json_decode($data->poll_fields, true);
-                                                        $totalVotes = $chartData->first()->count();
+                                                        // $totalVotes = $chartData->first()->count();
                                                         $prePer = null;
+
                                                     @endphp
 
                                                     @foreach ($fields as $key => $field)

@@ -44,14 +44,16 @@ class PollResultController extends Controller
          */
         if ($this->poll_data !== null) {
             return view('pages.poll-results', [
-                'chartData' => $this->poll_data,
+                'chartData' => $this->poll_data["data"],
+                'totalVotes' => $this->poll_data["total_votes"],
                 'fieldData' => $this->fields
             ]);
-        } else {
-
-            //Redirect if the poll is null.
-            return redirect('/');
         }
+        //  else {
+
+        //     //Redirect if the poll is null.
+        //     // return redirect('/');
+        // }
     }
 
     /**
@@ -62,17 +64,23 @@ class PollResultController extends Controller
     {
         try {
 
-            $data = Votes::query()
-                ->select('vote_field', DB::raw('COUNT(*) as votes'))
-                ->where('poll_id', $poll_id !== null ? $poll_id : $this->poll_id)
-                ->groupBy('vote_field');
+            $query = Votes::query()
+                ->where('poll_id', $poll_id !== null ? $poll_id : $this->poll_id);
 
-            if(!empty($data) && $data->exists()){
-                return $data->get();
+            $counts = $query->count();
+
+            $data = $query
+                ->select('vote_field', DB::raw('COUNT(vote_field) as votes'))
+                ->groupBy('vote_field');
+            
+            if (!empty($data) && $data->exists()) {
+                return [
+                    "data" => $data->get(),
+                    "total_votes" => $counts
+                ];
             }
 
             return null;
-
         } catch (\Throwable $th) {
             return null;
         }
@@ -87,17 +95,16 @@ class PollResultController extends Controller
         try {
 
             $data = Votes::query()
-                ->select('polls.poll_fields','polls.poll_name','created_by','polls.created_at', DB::raw('COUNT(*) as vote_count'))
+                ->select('polls.poll_fields', 'polls.poll_name', 'created_by', 'polls.created_at', DB::raw('COUNT(*) as vote_count'))
                 ->where('votes.poll_id', $poll_id !== null ? $poll_id : $this->poll_id)
-                ->join('polls','votes.poll_id','=','polls.poll_id')
-                ->groupBy('polls.poll_fields','polls.poll_name','created_by','polls.created_at');
+                ->join('polls', 'votes.poll_id', '=', 'polls.poll_id')
+                ->groupBy('polls.poll_fields', 'polls.poll_name', 'created_by', 'polls.created_at');
 
-            if(!empty($data) && $data->exists()){
+            if (!empty($data) && $data->exists()) {
                 return $data->get();
             }
 
             return null;
-
         } catch (\Throwable $th) {
             return null;
         }
@@ -109,7 +116,7 @@ class PollResultController extends Controller
      */
     public function refreshPoll(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
 
             $poll_id = $request->poll_id;
 
@@ -121,8 +128,7 @@ class PollResultController extends Controller
                 'fields' => $this->fields,
                 'poll_data' => $this->poll_data
             ]);
-        }
-        else{
+        } else {
             return response()->json(
                 [
                     'message' => 'Unable to complete Request',

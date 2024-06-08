@@ -7,6 +7,7 @@ use App\Models\Polls;
 use App\Models\Votes;
 use Livewire\Component;
 use App\Traits\MessageTrait;
+use Illuminate\Http\Request;
 
 class Poll extends Component
 {
@@ -22,16 +23,21 @@ class Poll extends Component
 
     public $poll_data;
 
-    public function mount(PollResultController $pollData)
+    public function mount(PollResultController $pollData, Request $request)
     {
-        $this->poll_id = request()->poll_id;
-        
+        $this->poll_id = $request->poll_id;
+
         $data = Polls::query()->where('poll_id', $this->poll_id);
 
-        $this->poll_data = $pollData->fieldsData($this->poll_id)[0];
+        $response = @$pollData->fieldsData($this->poll_id);
+        
+        if(!is_null($this->poll_data)){
+            $this->poll_data = $response[0];
+        }
 
         try {
-            if($data->exists()){
+
+            if ($data->exists()) {
 
                 // Get Json Data
                 $jsonData = $data->first()->poll_fields;
@@ -56,12 +62,12 @@ class Poll extends Component
          * array_key_exists will check the requested vote field is exists in the collection of the poll fields
          * either it will return true if exists or false if dosent exists.
          */
-        if(!array_key_exists($this->vote_field, $this->polldata)){
+        if (!array_key_exists($this->vote_field, $this->polldata)) {
             return $this->sendError("Unable To Find Selected Field");
         }
 
         try {
-            
+
             // Create an entry for vote. And Save poll Id And Vote Field
             $save = Votes::query()->create([
                 'poll_id' => $this->poll_id,
@@ -69,10 +75,9 @@ class Poll extends Component
                 'vote_field' => $this->vote_field,
             ]);
 
-            if($save){
+            if ($save) {
                 return $this->sendSuccess("Successfully Voted.");
             }
-
         } catch (\Throwable $th) {
             return $this->sendInfo("Something went wrong {$th->getCode()}");
         }
