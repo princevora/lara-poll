@@ -121,7 +121,7 @@ class AddFields extends Component
                 'created_by' => $created_by
             ]);
 
-            return $this->redirectRoute('vote.confirm-account', ['pollId' => $poll_id], navigate: true);
+            return $this->redirectRoute('vote.confirm-account', ['poll_id' => $poll_id], navigate: true);
 
         } catch (\Throwable $th) {
             dd($th->getMessage());
