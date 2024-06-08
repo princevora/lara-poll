@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('poll_id');
             $table->ipAddress('vote_ip');
             $table->tinyInteger('vote_field');
-            $table->tinyInteger('created_by')->comment("0 = guest, 1 = Registered User");
             $table->timestamps();
         });
     }
