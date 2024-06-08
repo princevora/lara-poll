@@ -49,11 +49,10 @@ class PollResultController extends Controller
                 'fieldData' => $this->fields
             ]);
         }
-        //  else {
-
-        //     //Redirect if the poll is null.
-        //     // return redirect('/');
-        // }
+         else {
+            //Redirect if the poll is null.
+            return redirect('/');
+        }
     }
 
     /**
