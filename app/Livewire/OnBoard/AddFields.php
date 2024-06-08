@@ -116,6 +116,7 @@ class AddFields extends Component
 
             dd($created_by);
 
+            
             Polls::create([
                 'poll_name' => $this->poll_name,
                 'poll_fields' => json_encode($this->fieldName, JSON_FORCE_OBJECT),
