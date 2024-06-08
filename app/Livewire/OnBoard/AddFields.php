@@ -124,7 +124,7 @@ class AddFields extends Component
             return $this->redirectRoute('vote.confirm-account', ['pollId' => $poll_id], navigate: true);
 
         } catch (\Throwable $th) {
-            return throw ValidationException::withMessages(['error' => 'soemthing went wrong']);
+            throw ValidationException::withMessages(['error' => $th->getMessage()]);
         }
     }
 }
