@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\Polls\PollResultController;
-use App\Models\Votes;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +39,10 @@ Route::prefix('poll')->group(function(){
      */
 });
 
+Route::prefix('u')->name('user.')->group(function() {
+    Route::view('dashboard', 'pages.user.dashboard.index')->name('dashboard');
+});
+
+Route::prefix('auth')->group(function () {
+    require_once __DIR__ . '/site/auth.php';
+});
