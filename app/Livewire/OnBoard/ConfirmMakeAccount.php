@@ -2,6 +2,7 @@
 
 namespace App\Livewire\OnBoard;
 
+use App\Models\Poll;
 use Illuminate\Support\Facades\Request;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -33,7 +34,12 @@ class ConfirmMakeAccount extends Component
     {
         $this->isAborted = true;
 
-        $this->dispatch('poll:start_making');
+        // activate the poll.
+        Poll::where('poll_id', $this->poll_id)
+                    ->update(['status' => 1]);
+
+        // Start making the poll
+        $this->dispatch('poll:start_making')->self();
     }
 
     #[On('poll:start_making')]

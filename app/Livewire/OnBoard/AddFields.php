@@ -2,7 +2,7 @@
 
 namespace App\Livewire\OnBoard;
 
-use App\Models\Polls;
+use App\Models\Poll;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -114,11 +114,12 @@ class AddFields extends Component
         // Save the Poll TO DB.
         try {
 
-            Polls::create([
-                'poll_name' => $this->poll_name,
+            Poll::create([
+                'poll_name'   => $this->poll_name,
                 'poll_fields' => json_encode($this->fieldName, JSON_FORCE_OBJECT),
-                'poll_id' => $poll_id,
-                'created_by' => $created_by
+                'poll_id'     => $poll_id,
+                'created_by'  => $created_by,
+                'status'      => 0
             ]);
 
             return $this->redirectRoute('vote.confirm-account', ['poll_id' => $poll_id], navigate: true);
