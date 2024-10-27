@@ -164,8 +164,9 @@ return [
          * web helpers Provider 
         */
 
-        App\Providers\AssetsJsServiceProvider::class,
-        App\Providers\AssetsServiceProvider::class,
+        App\Providers\JsAssetProvider::class,
+        App\Providers\CssAssetProvider::class,
+        App\Providers\UserDataProvider::class,
         // App\Providers\LoaderServiceProvider::class,
 
         /*
