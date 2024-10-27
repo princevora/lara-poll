@@ -42,6 +42,11 @@ class ConfirmMakeAccount extends Component
         $this->dispatch('poll:start_making')->self();
     }
 
+    public function continueMakeAccount()
+    {
+        return redirect()->route('auth.signup', $this->poll_id);
+    }
+
     #[On('poll:start_making')]
     public function makePoll()
     {

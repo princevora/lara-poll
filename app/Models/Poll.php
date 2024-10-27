@@ -14,4 +14,9 @@ class Poll extends Model
         'poll_id',
         'poll_fields'
     ];
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 }

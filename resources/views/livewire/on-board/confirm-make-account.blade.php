@@ -26,7 +26,10 @@
                     wire:click="abortMakeAccount"
                     class="btn btn-danger w-100 mt-4 mb-3"
                     >
-                    <div wire:loading >
+                    <div 
+                        wire:target='abortMakeAccount'
+                        wire:loading 
+                        >
                         <div
                             class="spinner-border text-primary spinner-border-sm"
                             role="status"
@@ -38,8 +41,20 @@
                 </button>
             </div>
             <div class="col-sm-6">
-                <button type="button"
-                    class="btn btn-dark w-100 mt-4 mb-3">Continue</button>
+                <button
+                    wire:click='continueMakeAccount'
+                    type="button"
+                    class="btn btn-dark d-flex justify-content-center gap-2 w-100 mt-4 mb-3">
+                    Continue
+                    <div
+                        wire:loading
+                        wire:target='continueMakeAccount'
+                        class="spinner-border text-primary spinner-border-sm"
+                        role="status"
+                    >
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </button>
             </div>
         @endif
     </div>

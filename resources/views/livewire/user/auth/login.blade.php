@@ -2,28 +2,11 @@
     <div class="card card-plain mt-8">
         <div class="card-header pb-0 text-left bg-transparent">
             <h3 class="font-weight-black text-dark display-6">
-                @if ($onBoarding)
-                    Sing Up For 
-                    <code>
-                        {{ Str::limit($poll->poll_name, 20, '...') }}
-                    </code>
-                @else
-                    Sign up
-                @endif
+                Sign In
             </h3>
         </div>
         <div class="card-body">
             <form wire:submit.prevent='save' role="form">
-                <label>Name</label>
-                <div class="mb-3">
-                    <input wire:model='name' wtype="text" class="form-control" placeholder="Enter your name"
-                        aria-label="Name" aria-describedby="name-addon">
-                        @error('name')
-                            <small class="text-danger text-small">
-                                {{ $message }}
-                            </small>
-                        @enderror
-                </div>
                 <label>Email Address</label>
                 <div class="mb-3">
                     <input wire:model='email' type="email" class="form-control" placeholder="Enter your email address"
@@ -54,7 +37,7 @@
                 </div>
                 <div class="text-center">
                     <button type="submit" class="d-flex justify-content-center gap-2 btn btn-dark w-100 mt-4 mb-3">
-                        Sign up
+                        Sign In
 
                         <div wire:loading wire:target='save' class="spinner-border text-primary spinner-border-sm"
                             role="status">
@@ -67,8 +50,8 @@
         </div>
         <div class="card-footer text-center pt-0 px-lg-2 px-1">
             <p class="mb-4 text-xs mx-auto">
-                Already have an account?
-                <a href="{{ route('auth.login') }}" wire:navigate class="text-dark font-weight-bold">Sign in</a>
+                Dont have an account?
+                <a href="{{ route('auth.signup') }}" wire:navigate class="text-dark font-weight-bold">Sign Up</a>
             </p>
         </div>
     </div>

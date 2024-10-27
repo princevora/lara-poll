@@ -7,7 +7,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/favicon.webp') }}">
   <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.webp') }}">
   <title>
-    Sign up
+    @yield('title')
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Noto+Sans:300,400,500,600,700,800|PT+Mono:300,400,500,600,700" rel="stylesheet" />

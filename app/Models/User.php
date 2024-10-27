@@ -50,4 +50,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function poll()
+    {
+        return $this->belongsTo(Poll::class);
+    }
 }

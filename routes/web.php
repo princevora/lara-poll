@@ -39,8 +39,8 @@ Route::prefix('poll')->group(function(){
      */
 });
 
-Route::prefix('u')->name('user.')->group(function() {
-    Route::view('dashboard', 'pages.user.dashboard.index')->name('dashboard');
+Route::prefix('u')->group(function() {
+    require_once __DIR__ . '/site/user.php';
 });
 
 Route::prefix('auth')->group(function () {
