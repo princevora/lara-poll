@@ -105,11 +105,16 @@ class AddFields extends Component
          */
 
          $created_by = 0; 
-
          
-        if(Auth::check()){
+         $userId = null;
+         
+        if(auth()->check()){
             $created_by = 1;
+            
+            // if any logged in user has created post
+            $userId = auth()->user()->id;
         }
+
 
         // Save the Poll TO DB.
         try {
@@ -119,7 +124,8 @@ class AddFields extends Component
                 'poll_fields' => json_encode($this->fieldName, JSON_FORCE_OBJECT),
                 'poll_id'     => $poll_id,
                 'created_by'  => $created_by,
-                'status'      => 0
+                'status'      => 0,
+                'user_id'     => $userId
             ]);
 
             return $this->redirectRoute('vote.confirm-account', ['poll_id' => $poll_id], navigate: true);
