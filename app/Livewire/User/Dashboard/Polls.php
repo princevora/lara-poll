@@ -3,6 +3,7 @@ namespace App\Livewire\User\Dashboard;
 
 use App\Models\Poll;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
@@ -11,41 +12,45 @@ use function Laravel\Prompts\select;
 class Polls extends Component
 {
     public $user_id;
-    
-    #[Url(as: 'query')]
+
+    #[Url('query', true, true)]
     public $search = '';
 
     public $timePeriod = '';
 
+    public $polls;
+
     public function mount()
     {
         $this->user_id = auth()->user()->id;
+        $this->polls = $this->initialize();
+    }
+
+    public function updatedSearch()
+    {
+        $this->polls = $this->initialize() ?? [];
     }
 
     public function render()
     {
-        return view('livewire.user.dashboard.polls', [
-            'polls' => $this->initialize()
-        ]);
+        return view('livewire.user.dashboard.polls');
     }
 
-    private function initialize()
+    public function initialize()
     {
-        $query = Poll::query()
-                ->where('user_id', $this->user_id)
-                ->where(function($query){
-                    $query->where('polls.poll_id', 'LIKE', "%{$this->search}%");
-                    $query->orWhere('poll_fields', 'LIKE', "%{$this->search}%");
-                });
-        // Get data For last 7 Days If Its 7
-        if($this->timePeriod == 7){
-            $query->where('created_at','<=', now()->subDays(7));
-        }
 
-        // Get data For last Month
-        elseif($this->timePeriod == 28){
-            $query->whereBetween('created_at', [now()->subMonth(), now()]);
-        }
+        $query = Poll::query()
+            ->where('user_id', $this->user_id)
+            ->when(!empty($this->search), function (Builder $query) {
+                $query->where('poll_id', 'LIKE', "%{$this->search}%");
+                $query->orWhere('poll_fields', 'LIKE', "%{$this->search}%");
+            })
+            ->when($this->timePeriod == 7, function (Builder $query) {
+                $query->where('created_at', '<=', now()->subDays(7));
+            })
+            ->when($this->timePeriod == 28, function (Builder $query) {
+                $query->whereBetween('created_at', [now()->subMonth(), now()]);
+            });
 
         return $query->get();
     }

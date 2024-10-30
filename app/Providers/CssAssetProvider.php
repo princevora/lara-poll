@@ -26,6 +26,8 @@ class CssAssetProvider extends ServiceProvider
                     <link id="pagestyle" href="{{ asset('assets/css/corporate-ui-dashboard.css?v=1.0.0') }}" rel="stylesheet" />
                 <!-- Material ICons -->
                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+                <link rel="manifest" href="/manifest.json">
+
             HTML;
         });
     }
