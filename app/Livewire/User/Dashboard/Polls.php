@@ -2,6 +2,7 @@
 namespace App\Livewire\User\Dashboard;
 
 use App\Models\Poll;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
@@ -13,9 +14,10 @@ class Polls extends Component
 {
     public $user_id;
 
-    #[Url('query', true, true)]
+    #[Url('search', true)]
     public $search = '';
 
+    #[Url('time', true)]
     public $timePeriod = '';
 
     public $polls;
@@ -25,10 +27,15 @@ class Polls extends Component
         $this->user_id = auth()->user()->id;
         $this->polls = $this->initialize();
     }
+    
+    public function updatedTimePeriod()
+    {
+        $this->polls = $this->initialize();
+    }
 
     public function updatedSearch()
     {
-        $this->polls = $this->initialize() ?? [];
+        $this->polls = $this->initialize();
     }
 
     public function render()
@@ -42,16 +49,17 @@ class Polls extends Component
         $query = Poll::query()
             ->where('user_id', $this->user_id)
             ->when(!empty($this->search), function (Builder $query) {
-                $query->where('poll_id', 'LIKE', "%{$this->search}%");
-                $query->orWhere('poll_fields', 'LIKE', "%{$this->search}%");
+                $query->where(function (Builder $query) {
+                    $query->where('poll_id', 'LIKE', "%{$this->search}%")
+                        ->orWhere('poll_fields', 'LIKE', "%{$this->search}%");
+                });
             })
             ->when($this->timePeriod == 7, function (Builder $query) {
-                $query->where('created_at', '<=', now()->subDays(7));
+                $query->whereBetween('created_at', [now()->subDays(7), now()]);
             })
             ->when($this->timePeriod == 28, function (Builder $query) {
                 $query->whereBetween('created_at', [now()->subMonth(), now()]);
             });
-
         return $query->get();
     }
 

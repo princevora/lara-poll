@@ -11,3 +11,7 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+
+window.Alpine = Alpine
+Alpine.start();

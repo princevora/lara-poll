@@ -25,7 +25,7 @@
             <input type="text" class="form-control"  placeholder="Search" wire:model.live="search">
         </div>
     </div>
-    <div class="table-responsive p-0">
+    <div class="table-responsive p-0" wire:poll>
         <table class="table align-items-center mb-0">
             <thead class="bg-gray-100">
                 <tr>
@@ -36,9 +36,9 @@
                 </tr>
             </thead>
             {{-- {{var_dump($polls->vote_field)}} --}}
-            <tbody>
+            <tbody >
                 @foreach ($polls as $poll)
-                    <tr>
+                    <tr wire:key='{{ $poll->id }}'>
                         <td>
                             <div class="d-flex px-2 py-1">
                                 <div class="d-flex flex-column justify-content-center ms-1">
