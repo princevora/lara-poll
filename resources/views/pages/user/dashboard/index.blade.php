@@ -53,7 +53,7 @@
                     <div class="col-12">
                       <div class="blur shadow d-flex align-items-center w-100 border-radius-md border border-white mt-8 p-3">
                         <div class="w-50">
-                          <a href="{{ route('user.polls') }}" class="text-dark text-sm font-weight-bold mb-1">View My Polls</a>
+                          <a href="{{ route('user.polls.index') }}" class="text-dark text-sm font-weight-bold mb-1">View My Polls</a>
                         </div>
                       </div>
                     </div>
