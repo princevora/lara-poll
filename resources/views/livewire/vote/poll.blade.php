@@ -1,15 +1,4 @@
 <div>
-    {{-- <div class="d-flex justify-content-start"> --}}
-        <b>
-            {{-- {!! $poll_data->poll_name !!} --}}
-        </b><br>
-            {{-- </h5> &nbsp; --}}
-            <!-- SHow Who created The poll -->
-            {{-- by a {{$poll_data->created_by == 1 ? 'user' : 'guest'}} · <b> --}}
-    
-            <!-- SHow when the poll was created -->
-            {{-- &nbsp; {{$poll_data->created_at->diffForHumans()}} --}}
-    {{-- </div> --}}
     <div class="row">
         <!-- Form column -->
         <div class="col-md-6 mt-4">
@@ -27,12 +16,13 @@
                                         name="radioDisabled" 
                                         wire:model="vote_field"
                                         value="{{$key}}"
+                                        id="field-{{ $key }}"
                                         class="form-check-input form-check-input-info" />
-                                    <label class="d-flex justify-content-start mx-2">{{$pollField}}</label>
+                                    <label class="d-flex justify-content-start mx-2" for="field-{{ $key }}">{{$pollField}}</label>
                                 </div>
                             @endforeach
             
-                            <div class="text-center col-6">
+                            <div class="text-center col-6 d-flex gap-2">
                                 <button type="submit" class="btn btn-dark w-100 mt-4 mb-3">
                                     <div wire:loading wire:target="createPoll"
                                         class="spinner-border text-primary spinner-border-sm"
@@ -44,6 +34,9 @@
                                         <i class=""></i>
                                     </span>
                                 </button>
+                                <a href="{{ route('public.poll.results', $poll_id) }}" class="btn btn-dark w-100 mt-4 mb-3">
+                                    Results
+                                </a>
                             </div>
                         @else
                             <h3>Unable TO FInd data</h3>

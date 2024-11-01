@@ -3,11 +3,16 @@
 namespace App\Livewire\User\Dashboard;
 
 use App\Models\Poll;
+use App\Traits\MessageTrait;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class EditPoll extends Component
 {
+    use MessageTrait;
+
     /**
      * @var mixed $poll
      */
@@ -17,6 +22,11 @@ class EditPoll extends Component
      * @var array<int, string> $fields 
      */
     public $fields;
+
+    /**
+     * @var string
+     */
+    public string $title;
 
     /**
      * @param \Illuminate\Http\Request $request
@@ -32,6 +42,7 @@ class EditPoll extends Component
         }
 
         $this->fields = json_decode($this->poll->poll_fields, true);
+        $this->title = $this->poll->poll_name;
     }
 
     /**
@@ -54,5 +65,35 @@ class EditPoll extends Component
     public function addField()
     {
         $this->fields[] = 'This is a ' . count($this->fields) + 1;
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'title' => 'required'
+        ]);
+
+        // Check if there is any field empty
+        $emptyFields = array_filter($this->fields, function ($field) {
+            return empty($field);
+        });
+
+        if(!empty($emptyFields)) {
+            $errors = [];
+            // Add erorrs for the empty fields.
+            foreach ($emptyFields as $key => $value) {
+                $errors["error_key_{$key}"] = "The Following Field Cannot Be empty"; 
+            }
+
+            throw ValidationException::withMessages($errors);
+        }
+
+        // Update poll
+        $this->poll->update([
+            'poll_fields' => json_encode($this->fields, JSON_FORCE_OBJECT),
+            'poll_name'   => $this->title
+        ]);
+
+        return $this->sendSuccess('The Poll Has Been Updated');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Polls;
 
 use App\Http\Controllers\Controller;
-use App\Models\Votes;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -43,14 +43,13 @@ class PollResultController extends Controller
          * Attempt A Conditional Rendering to prevent user to view the page.
          */
 
-        if ($this->poll_data !== null ) {
+        if ($this->poll_data !== null) {
             return view('pages.poll-results', [
                 'chartData' => $this->poll_data["data"],
                 'totalVotes' => $this->poll_data["total_votes"],
                 'fieldData' => $this->fields
             ]);
-        }
-         else {
+        } else {
             //Redirect if the poll is null.
             return redirect('/');
         }
@@ -64,7 +63,7 @@ class PollResultController extends Controller
     {
         try {
 
-            $query = Votes::query()
+            $query = Vote::query()
                 ->where('poll_id', $poll_id !== null ? $poll_id : $this->poll_id);
 
             $counts = $query->count();
@@ -72,7 +71,7 @@ class PollResultController extends Controller
             $data = $query
                 ->select('vote_field', DB::raw('COUNT(vote_field) as votes'))
                 ->groupBy('vote_field');
-            
+
             if (!empty($data) && $data->exists()) {
                 return [
                     "data" => $data->get(),
@@ -94,7 +93,7 @@ class PollResultController extends Controller
     {
         try {
 
-            $data = Votes::query()
+            $data = Vote::query()
                 ->select('polls.poll_fields', 'polls.poll_name', 'created_by', 'polls.created_at', DB::raw('COUNT(*) as vote_count'))
                 ->where('votes.poll_id', $poll_id !== null ? $poll_id : $this->poll_id)
                 ->join('polls', 'votes.poll_id', '=', 'polls.poll_id')
@@ -133,9 +132,9 @@ class PollResultController extends Controller
                 [
                     'message' => 'Unable to complete Request',
                     'reason' => [
-                        'code' => 405,
-                        'text' => 'Method Not Allowed'
-                    ],
+                            'code' => 405,
+                            'text' => 'Method Not Allowed'
+                        ],
                 ]
             );
         }

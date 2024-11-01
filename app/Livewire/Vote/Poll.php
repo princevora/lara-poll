@@ -3,8 +3,8 @@
 namespace App\Livewire\Vote;
 
 use App\Http\Controllers\Polls\PollResultController;
-use App\Models\Polls;
-use App\Models\Votes;
+use App\Models\Poll as Polls;
+use App\Models\Vote;
 use Livewire\Component;
 use App\Traits\MessageTrait;
 use Illuminate\Http\Request;
@@ -66,19 +66,28 @@ class Poll extends Component
             return $this->sendError("Unable To Find Selected Field");
         }
 
+        // check if user has already voted.
+        if(
+            Vote::where('vote_ip', request()->ip())
+                ->where('poll_id', $this->poll_id)
+                ->exists()
+        ) return $this->sendError('You Have Already Voted the poll');
+
         try {
 
             // Create an entry for vote. And Save poll Id And Vote Field
-            $save = Votes::query()->create([
-                'poll_id' => $this->poll_id,
-                'vote_ip' => request()->ip(),
-                'vote_field' => $this->vote_field,
-            ]);
+            $save = Vote::query()
+                ->create([
+                    'poll_id' => $this->poll_id,
+                    'vote_ip' => request()->ip(),
+                    'vote_field' => $this->vote_field,
+                ]);
 
             if ($save) {
                 return $this->sendSuccess("Successfully Voted.");
             }
         } catch (\Throwable $th) {
+            dd($th);
             return $this->sendInfo("Something went wrong {$th->getCode()}");
         }
     }
