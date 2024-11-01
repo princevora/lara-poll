@@ -128,6 +128,10 @@ class AddFields extends Component
                 'user_id'     => $userId
             ]);
 
+            if($created_by == 1) {
+                return $this->redirectRoute('user.polls.index');
+            }
+
             return $this->redirectRoute('vote.confirm-account', ['poll_id' => $poll_id], navigate: true);
 
         } catch (\Throwable $th) {

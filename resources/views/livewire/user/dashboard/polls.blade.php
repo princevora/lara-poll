@@ -38,7 +38,16 @@
             {{-- {{var_dump($polls->vote_field)}} --}}
             <tbody >
                 @foreach ($polls as $poll)
-                    <tr wire:key='{{ $poll->id }}'>
+                    @php
+                        $heightLight = !request()->has('highlight') ?: true;
+                        $heightLightField = $heightLight ?  strtolower(request()->highlight) : '';
+                    @endphp
+                    <tr 
+                        wire:key='{{ $poll->id }}'
+                        @class([
+                            'border border-primary' => $heightLight && $heightLightField == strtolower($poll->poll_id)
+                        ])
+                    >
                         <td>
                             <div class="d-flex px-2 py-1">
                                 <div class="d-flex flex-column justify-content-center ms-1">

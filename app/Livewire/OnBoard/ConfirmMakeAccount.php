@@ -50,7 +50,7 @@ class ConfirmMakeAccount extends Component
     #[On('poll:start_making')]
     public function makePoll()
     {
-        sleep(2);
+        sleep(1);
 
         $this->isAborted = false;
 
